@@ -1,25 +1,32 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Trivial;
 
 import java.io.DataOutputStream;
 import java.io.RandomAccessFile;
 
 /**
- *
- * @author DAW13
+ * Class to manipulate the Answer Compuestas
+ * @author AntoIba
  */
 public class Compuesta extends Respuestas {
     
+    /**
+     * Constructor of the class Compuesta
+     */
     public Compuesta() {
         super();
     }
+    /**
+     * Constructor of the class with parameters
+     * @param id It is the ID of the answer
+     * @param answer It is the String of the answer
+     */
     public Compuesta(int id, String answer) {
         super();
     }
+    /**
+     * Method to save to file the Answer
+     * @param dat It is the stream of the data 
+     */
     @Override
     public void saveToFile(DataOutputStream dat) {
         int space = 100;
@@ -33,6 +40,10 @@ public class Compuesta extends Respuestas {
             e.printStackTrace();
         }
     }
+    /**
+     * Method to save to file the Answer 
+     * @param raf It is the stream of data
+     */
     @Override
     public void saveToFile(RandomAccessFile raf) {
         int space = 100;

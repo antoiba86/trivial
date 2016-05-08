@@ -1,24 +1,32 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Trivial;
 
 import java.io.DataOutputStream;
 import java.io.RandomAccessFile;
 
 /**
- *
- * @author DAW13
+ * Class of the son of Respuestas, Sino
+ * @author AntoIba
  */
 public class Sino extends Respuestas {
+    
+    /**
+     * Constructor of the class
+     */
     public Sino(){
         super();
     }
+    /**
+     * Constructor with parameters of the class
+     * @param id It is the id of the answer
+     * @param answer It is the answer
+     */
     public Sino(int id, String answer){
         super();
     }
+    /**
+     * Method to save a Answer into the file
+     * @param dat It is the stream of the data
+     */
     @Override
     public void saveToFile(DataOutputStream dat) {
         
@@ -31,6 +39,10 @@ public class Sino extends Respuestas {
             e.printStackTrace();
         }
     }
+    /**
+     * Method to save to file the Answer
+     * @param raf It is the stream of data
+     */
     @Override
     public void saveToFile(RandomAccessFile raf) {
         

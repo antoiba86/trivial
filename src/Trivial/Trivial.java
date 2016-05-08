@@ -1,6 +1,5 @@
 package Trivial;
 
-import static Trivial.Interface.addTabla;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -10,34 +9,29 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- *
- * @author DAW13
+ * Class with method to manipulate the data of the game
+ * @author AntoIba86
  */
 public class Trivial {
-    private ArrayList<Integer> usedID = new ArrayList<>();
+    static private ArrayList<Integer> usedID = new ArrayList<>();
     static boolean responder = true;
     static boolean responderTwo = true;
-    static boolean turno = true;
-    static boolean delText = false;
+    static int turno = 1;
     static int numero = 0;
     static int numeroTwo = 0;
-    static int numPreg = 0;
+    static boolean wait = false;
+    static File f = new File ("Preguntas.dat");
     
-    
-    
+    /**
+     * Method to add a question to a file
+     * @param cat It is the category of the question
+     * @param type It is the type of the question
+     * @param pregunta It is the question of the question
+     * @param respuesta It is the answer of the question
+     */
     public static void add(int cat, int type, String pregunta, String respuesta) {
         int id, id_ans;
-        File f = new File("Preguntas.dat");
         File fr = null;
         Respuestas r = null;
         if (type == 1) r = new Simple();
@@ -61,12 +55,12 @@ public class Trivial {
             r.saveToFile(dos2);
             dos2.close();
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
-    
+    /**
+     * Method to read the question from the file to the table
+     */
     public static void read() {
-        File f = new File ("Preguntas.dat");
         Preguntas p = new Preguntas();
         Respuestas r;
         String respuesta = "";
@@ -85,7 +79,7 @@ public class Trivial {
                         }
                     }
                     else respuesta = r.getAnswer();
-                    Tabla t = new Tabla(p.getId(), Library.categConvert(p.getCat()), Library.typeConvert(p.getType())
+                    Tabla t = new Tabla(p.getId(), Library.categToString(p.getCat()), Library.typeToString(p.getType())
                     ,p.getQuestion(), respuesta, p.isDel());
                     Interface.addTabla(p.getId(),t.getCat(), t.getType(),t.getQuestion(),t.getAnswer(),t.isDel());
                     respuesta = "";
@@ -97,25 +91,17 @@ public class Trivial {
         }
     }
     
-    public static Tabla lookFor(int id, File f) {
-        Tabla t = null;
-        String s;
-        if (f.exists()) {
-            Preguntas p = Library.readQuestion(f, id);
-            Respuestas r = Library.readAnswer(Library.getFile(p.getType()), p.getId_ans(), Library.getNumberBytes(p.getType()));
-            t = new Tabla(id, Library.categConvert(p.getCat()), Library.typeConvert(p.getType())
-            ,p.getQuestion(), r.getAnswer(), p.isDel());
-        }
-        return t;
-    }
-    //Look for y GamePregunta es igual
-    public static String lookFor(int id) {
+    /**
+     * Method to search a question from the file
+     * @param id It is the id of the question
+     * @return The question
+     */
+    public static String search(int id) {
         String s = "";
         String respuesta = "";
-        File f = new File ("Preguntas.dat");
         if (f.exists()) {
             Preguntas p = Library.readQuestion(f, id);
-            s = Library.categConvert(p.getCat()) + "-" + Library.typeConvert(p.getType()) + "-" + p.getQuestion() + "-" + p.isDel() + "-";
+            s = Library.categToString(p.getCat()) + "-" + Library.typeToString(p.getType()) + "-" + p.getQuestion() + "-" + p.isDel() + "-";
             Respuestas r = Library.readAnswer(Library.getFile(p.getType()), p.getId_ans(), Library.getNumberBytes(p.getType()));
             if (p.getType() == 2) {
                 String[] answer = r.getAnswer().split("_");
@@ -130,8 +116,15 @@ public class Trivial {
         return s;
     }
     
+    /**
+     * Method to modify a question
+     * @param id Id of the question
+     * @param cat The category of the question
+     * @param type The type of the question
+     * @param pregunta The question of the question
+     * @param respuesta The answer of the question
+     */
     public static void toModify(int id, int cat, int type, String pregunta, String respuesta) {
-        File f = new File("Preguntas.dat");
         File fr = Library.getFile(type);
         int n = Library.getNumberBytes(type);
         Preguntas p = Library.readQuestion(f, id);
@@ -140,11 +133,16 @@ public class Trivial {
         p.setQuestion(pregunta);
         r.setAnswer(respuesta);
         Library.saveQuestion(f, id, p);
-        Library.saveAnswer(fr, id, n, r);
+        Library.saveAnswer(fr, p.getId_ans(), n, r);
     }
-    
+    /**
+     * Method to delete or recover a question 
+     * @param id It is the id of the question
+     * @param opcion There is two options, delete or recover<br>
+     * Number 1 deletes the question and it does not appear in the game<br>
+     * Number 2 recovers the question and it appears in the game
+     */
     public static void toDelete (int id, int opcion) {
-        File f = new File("Preguntas.dat");
         Preguntas p = Library.readQuestion(f, id);
         File fr = Library.getFile(p.getType());
         int n = Library.getNumberBytes(p.getType());
@@ -157,11 +155,14 @@ public class Trivial {
            p.setDel(false);
            r.setDel(false); 
         }
-        
         Library.saveQuestion(f, id, p);
-        Library.saveAnswer(fr, id, n, r);
+        Library.saveAnswer(fr, p.getId_ans(), n, r);
     }
-    
+    /**
+     * Method to get the question from the file for the game
+     * @param number It is the last question Id of the file
+     * @return The question from the file
+     */
     public String getPregunta(int number){
         number -= 1;
         boolean inside = true;
@@ -184,83 +185,102 @@ public class Trivial {
         String s = Trivial.gamePregunta(n);
         return s;
     }
-    
+    /**
+     * Method to recover the question and the answer from the file for the game
+     * @param id It is the id of the question
+     * @return The question and the answer for the method getPregunta
+     */
     public static String gamePregunta(int id) {
-        String s = "";
-        String solucion = "";
-        File f = new File ("Preguntas.dat");
+        String question;
+        String solution;
         Preguntas p = Library.readQuestion(f,id);
         File fr = Library.getFile(p.getType());
         int n = Library.getNumberBytes(p.getType());
         Respuestas r = Library.readAnswer(fr, p.getId_ans(), n);
-        s = String.format("%20s %10s %100s " , Library.categConvert(p.getCat()), Library.typeConvert(p.getType()), p.getQuestion()) + "\n";
-        solucion = s + "-" + r.getAnswer();
-        return solucion;
+        question = p.getCat() + "-" + p.getType() + "-" + p.getQuestion();
+        solution = question + "-" + r.getAnswer();
+        return solution;
     }
-    
+    /**
+     * Method to reset the elements of the game
+     */
     public void reset() {
         usedID.clear();
         responder = true;
         responderTwo = true;
         numero = 0;
         numeroTwo = 0;
-        numPreg = 0;
-        turno = true;
-        delText = true;
+        turno = 1;
+        wait = false;
     }
-    
-    public void setUsedID(ArrayList<Integer> usedID) {
-        this.usedID = usedID;
-    }
-
+    /**
+     * Method to return the boolean responder
+     * @param opcion It is to get the boolean for the player one or two
+     * @return The boolean responder or responerTwo
+     */
     public static boolean isResponder(int opcion) {
         boolean r = false;
         if (opcion == 1) r = responder;
         if (opcion == 2) r = responderTwo;
         return r;
     }
-
+    
+    /**
+     * Method to set the boolean responder to false or true
+     * @param responder Boolean to know is the question was answer in the game
+     * @param opcion There is two option for the two players
+     */
     public static void setResponder(boolean responder, int opcion) {
         if (opcion == 1) Trivial.responder = responder;
         if (opcion == 2) Trivial.responderTwo = responder;
     }
-
+    /**
+     * Method to get the score of the game for the two players
+     * @param opcion It is the option for the player one or two
+     * @return The score for the two players
+     */
     public static int getNumero(int opcion) {
         int n = 0;
         if (opcion == 1) n = numero;
         if (opcion == 2) n = numeroTwo;
-        return numero;
+        return n;
     }
-
+    /**
+     * Method to set the score of the game for the two players
+     * @param numero It is the score of the player
+     * @param opcion It is the option for the player one or two
+     */
     public static void setNumero(int numero, int opcion) {
         if (opcion == 1) Trivial.numero = numero;
         if (opcion == 2) Trivial.numeroTwo = numero;
     }
-    //Para que era??????
-    public static int getNumPreg() {
-        return numPreg;
-    }
-
-    public static void setNumPreg(int numPreg) {
-        Trivial.numPreg = numPreg;
-    }
-
-    public static boolean isTurno() {
+    /**
+     * Method to get the turn of the player
+     * @return The turn of the player
+     */
+    public static int getTurno() {
         return turno;
     }
-
-    public static void setTurno(boolean turno) {
+    
+    /**
+     * Method to set the turn of the player
+     * @param turno It is the turn of the player
+     */
+    public static void setTurno(int turno) {
         Trivial.turno = turno;
     }
-
-    public static boolean isDelText() {
-        return delText;
+    /**
+     * Method for the variable wait which is to know when is finish the turn
+     * @return The variable wait
+     */
+    public static boolean isWait() {
+        return wait;
     }
-
-    public static void setDelText(boolean delText) {
-        Trivial.delText = delText;
+    /**
+     * Method to set the variable wait
+     * @param wait It is the boolean of end of turn
+     */
+    public static void setWait(boolean wait) {
+        Trivial.wait = wait;
     }
-    
-    
-    
 }

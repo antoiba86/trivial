@@ -36,7 +36,7 @@
 
 #menulabel {
    -fx-font-size: 50px;
-   -fx-text-fill: red;
+   -fx-text-fill: #a0522d;
    -fx-font-weight: bold;
    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 ); 
 }

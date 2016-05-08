@@ -54,3 +54,24 @@ and open the template in the editor.
    -fx-font-weight: bold;
    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 ); 
 }
+
+#tituloUno {
+   -fx-font-size: 50px;
+   -fx-text-fill: #4682b4;
+   -fx-font-weight: bold;
+   -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 ); 
+}
+
+#tituloDos {
+   -fx-font-size: 50px;
+   -fx-text-fill: #b0c4de;
+   -fx-font-weight: bold;
+   -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 ); 
+}
+
+#Text {
+   -fx-font-size: 20px;
+   -fx-text-fill: lightblue;
+   -fx-font-weight: bold;
+   -fx-background-color: #C3D9FF;
+}

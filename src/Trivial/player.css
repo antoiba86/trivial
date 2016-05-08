@@ -1,0 +1,54 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 04-mar-2016, 10:28:07
+    Author     : DAW13
+*/
+
+.text-field {
+    
+}
+
+#score {
+    -fx-background-color: #3BB1B9;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-text-fill: white;
+    -fx-text-alignment: center;
+}
+
+#question {
+    -fx-text-fill: white;
+    -fx-text-alignment: center;
+}
+
+.choice-box, .radio-button, #answer {
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-background-color: linear-gradient(#EFEFBB, #D4D3DD);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+#answer, .radio-button {
+    -fx-text-fill: black;
+}
+.radio-button {
+    -fx-font-size: 15px;
+}
+
+#cajaPlayer, #cajaPlayer2 {
+    -fx-background-color: #ffffe0;
+    -fx-background-radius: 25px;
+    -fx-border-radius: 25px;
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+    -fx-border-color: white;
+}
+#cajaPlayer2 {
+    -fx-background-color: azure;
+}
